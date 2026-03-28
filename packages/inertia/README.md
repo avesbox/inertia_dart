@@ -6,8 +6,6 @@ support, and testing utilities. Pair it with a client adapter like
 `@inertiajs/react`, `@inertiajs/vue3`, or `@inertiajs/svelte`.
 
 > **New here?** Follow the [Build a Contacts App](https://kingwill101.github.io/docs/inertia_dart/tutorial) tutorial for a hands-on walkthrough using just `dart:io`.
->
-> **Using the Routed framework?** See [`routed_inertia`](../routed_inertia) for the framework integration.
 
 ## Install
 
@@ -53,7 +51,6 @@ final page = InertiaResponseFactory().buildPageData(
 final response = InertiaResponse.json(page);
 ```
 
-For a full framework integration, see [`packages/routed_inertia`](../routed_inertia).
 For working server/client samples, see:
 - [`packages/inertia/example/inertia_client_app`](example/inertia_client_app)
 - [`packages/inertia/example/inertia_ssr_app`](example/inertia_ssr_app)
@@ -226,5 +223,4 @@ response.assertInertia((page) {
 ## Learn More
 
 - [Inertia Dart docs](https://kingwill101.github.io/docs/inertia_dart/) -- full API reference and tutorial
-- [Routed Inertia docs](https://kingwill101.github.io/docs/routed_inertia/) -- framework integration for Routed apps
 - [Inertia core docs](https://inertiajs.com) -- protocol specification and client adapters
