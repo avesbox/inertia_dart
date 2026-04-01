@@ -31,6 +31,7 @@ jobs:
           sdk: ${{ matrix.sdk }}
 
       - name: Install dependencies
+        working-directory: packages/${{ matrix.package }}
         run: dart pub get
 
       - name: Format check
@@ -47,42 +48,3 @@ jobs:
         working-directory: packages/${{ matrix.package }}
         run: |
           dart test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        sdk: [stable]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: ${{ matrix.sdk }}
-
-      - name: Install dependencies
-        run: dart pub get
-
-      - name: Format check
-        run: |
-          dart format --set-exit-if-changed \
-            packages/inertia/lib packages/inertia/test \
-            packages/routed_inertia/lib packages/routed_inertia/test \
-            packages/serinus_inertia/lib packages/serinus_inertia/test
-
-      - name: Analyze
-        run: |
-          dart analyze --no-fatal-warnings packages/inertia/lib packages/inertia/test
-          dart analyze --no-fatal-warnings packages/routed_inertia/lib packages/routed_inertia/test
-          dart analyze --no-fatal-warnings packages/serinus_inertia/lib packages/serinus_inertia/test
-
-      - name: Run package tests
-        run: |
-          set -euo pipefail
-          for package in packages/*; do
-            if [ -d "$package/test" ]; then
-              echo "::group::Testing $package"
-              (cd "$package" && dart test)
-              echo "::endgroup::"
-            fi
-          done
