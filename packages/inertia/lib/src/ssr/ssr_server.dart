@@ -100,15 +100,30 @@ Future<bool> stopSsrServer({
   http.Client? client,
 }) async {
   final uri = shutdownEndpoint ?? endpoint.resolve('/shutdown');
-  final httpClient = client ?? http.Client();
+  if (client != null) {
+    try {
+      await client.get(uri);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  final httpClient = HttpClient();
   try {
-    await httpClient.get(uri);
+    final request = await httpClient.getUrl(uri);
+    final response = await request.close();
+    await response.drain<void>();
+    return true;
+  } on SocketException {
+    return false;
+  } on HttpException {
+    // The Inertia SSR shutdown endpoint closes the socket immediately after
+    // accepting the request, which surfaces as an empty HTTP reply.
     return true;
   } catch (_) {
     return false;
   } finally {
-    if (client == null) {
-      httpClient.close();
-    }
+    httpClient.close(force: true);
   }
 }

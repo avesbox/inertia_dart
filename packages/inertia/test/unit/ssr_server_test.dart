@@ -126,5 +126,21 @@ void main() {
 
       expect(stopped, isFalse);
     });
+
+    test('stopSsrServer treats empty reply as success', () async {
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((socket) {
+        socket.listen((_) {
+          socket.destroy();
+        });
+      });
+      addTearDown(() => server.close());
+
+      final stopped = await stopSsrServer(
+        endpoint: Uri.parse('http://127.0.0.1:${server.port}'),
+      );
+
+      expect(stopped, isTrue);
+    });
   });
 }

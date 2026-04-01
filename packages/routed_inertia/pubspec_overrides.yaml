@@ -1,0 +1,3 @@
+dependency_overrides:
+  inertia_dart:
+    path: ../inertia

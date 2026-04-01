@@ -4,23 +4,17 @@ import 'dart:io';
 
 import 'package:artisanal/args.dart';
 import 'package:artisanal/artisanal.dart';
+import 'package:inertia_dart/inertia_dart.dart';
 import 'package:path/path.dart' as p;
 
-import '../ssr/ssr_server.dart';
-import '../ssr/ssr_server_config.dart';
-import 'inertia_cli.dart';
+import 'serinus_inertia_cli.dart';
 import 'ssr_utils.dart';
 
-/// Implements the `inertia ssr:start` command.
-///
-/// ```dart
-/// final exitCode = await InertiaSsrStartCommand(cli).run();
-/// ```
-///
-/// Starts the SSR server process.
-class InertiaSsrStartCommand extends Command<int> {
-  /// Creates the `ssr:start` command bound to [InertiaCli].
-  InertiaSsrStartCommand(this._cli) {
+/// Implements the `ssr:start` command for Serinus Inertia.
+class SerinusInertiaSsrStartCommand extends Command<int> {
+  /// Creates the `ssr:start` command bound to [SerinusInertiaCli].
+  SerinusInertiaSsrStartCommand(this._cli)
+    : super(aliases: const ['ssr:start']) {
     argParser
       ..addOption(
         'runtime',
@@ -56,18 +50,21 @@ class InertiaSsrStartCommand extends Command<int> {
       );
   }
 
-  final InertiaCli _cli;
+  final SerinusInertiaCli _cli;
+  static const List<String> _defaultBundleCandidates = [
+    'client/dist/ssr.js',
+    'client/dist/ssr.mjs',
+    'client/dist/server/entry-server.js',
+    'client/dist/server/entry-server.mjs',
+  ];
 
   @override
-  /// The command name.
-  String get name => 'ssr:start';
+  String get name => 'start';
 
   @override
-  /// The command description.
-  String get description => 'Start the Inertia SSR server bundle.';
+  String get description => 'Start the Serinus Inertia SSR server bundle.';
 
   @override
-  /// Runs the command and returns an exit code.
   Future<int> run() async {
     final io = this.io;
     final runtime = argResults?['runtime'] as String? ?? 'node';
@@ -92,14 +89,16 @@ class InertiaSsrStartCommand extends Command<int> {
       runtime: runtime,
       bundle: bundleOption,
       runtimeArgs: runtimeArgs,
-      bundleCandidates: bundleCandidates,
+      bundleCandidates: [...bundleCandidates, ..._defaultBundleCandidates],
       workingDirectory: workingDirectory,
       environment: environment,
     );
     final bundle = config.resolveBundle();
     if (bundle == null) {
-      io.error('Inertia SSR bundle not found.');
-      io.note('Provide --bundle or place it in bootstrap/ssr/ssr.mjs.');
+      io.error('Serinus Inertia SSR bundle not found.');
+      io.note(
+        'Provide --bundle or place it in client/dist/ssr.js or bootstrap/ssr/ssr.mjs.',
+      );
       return 1;
     }
 
@@ -109,12 +108,7 @@ class InertiaSsrStartCommand extends Command<int> {
       io.note('Using detected bundle: $bundle');
     }
 
-    if (runtime != 'node' && runtime != 'bun') {
-      io.error('Unsupported runtime: $runtime. Use node or bun.');
-      return 64;
-    }
-
-    io.title('Starting Inertia SSR');
+    io.title('Starting Serinus Inertia SSR');
     io.twoColumnDetail('Runtime', runtime);
     io.twoColumnDetail('Bundle', bundle);
 

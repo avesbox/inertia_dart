@@ -1,0 +1,14 @@
+name: serinus_inertia_example
+publish_to: none
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+
+dependencies:
+  serinus: ^2.1.7
+  serinus_inertia:
+    path: ..
+
+dependency_overrides:
+  inertia_dart:
+    path: ../../inertia

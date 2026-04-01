@@ -5,12 +5,6 @@ import 'dart:io';
 
 import 'package:artisanal/artisanal.dart';
 
-/// Utility helpers for SSR CLI commands.
-///
-/// ```dart
-/// final base = normalizeSsrBase('http://localhost:13714/render');
-/// ```
-///
 /// Normalizes an SSR endpoint URL to the base server URL.
 Uri normalizeSsrBase(String url) {
   final uri = Uri.parse(url);
@@ -56,8 +50,10 @@ List<StreamSubscription<ProcessSignal>> attachSignals(
         }),
       );
     } on UnsupportedError {
+      // Some platforms do not expose every POSIX signal.
       continue;
     } on SignalException {
+      // Some platforms do not expose every POSIX signal.
       continue;
     }
   }

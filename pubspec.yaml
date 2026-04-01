@@ -3,6 +3,7 @@ publish_to: none
 
 workspace:
   - packages/inertia
+  - packages/serinus_inertia
   - examples/contacts_app
 
 environment:

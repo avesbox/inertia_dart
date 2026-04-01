@@ -15,6 +15,10 @@ dart pub get
 ## Packages
 
 - `packages/inertia` implements the core Inertia protocol helpers for Dart.
+- `packages/routed_inertia` adds Routed middleware, `EngineContext` helpers,
+  config wiring, and SSR support for Inertia responses.
+- `packages/serinus_inertia` adds Serinus request/response adapters and
+  `RequestContext` helpers for Inertia responses.
 
 ## Examples
 

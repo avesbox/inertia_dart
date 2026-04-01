@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:artisanal/artisanal.dart';
 import 'package:path/path.dart' as p;
 
+import '../assets/vite_hot_file_plugin.dart';
 import 'framework.dart';
-import 'templates.dart';
 
 /// Runs an external command and returns a [TaskResult].
 ///
@@ -46,8 +46,7 @@ Future<void> configureInertiaProject(
   final configFile = File(p.join(projectDir.path, 'vite.config.js'));
   await configFile.writeAsString(framework.configTemplate);
 
-  final hotFile = File(p.join(projectDir.path, 'inertia_hot_file.js'));
-  await hotFile.writeAsString(inertiaHotFilePlugin);
+  await writeInertiaViteHotFilePlugin(projectDir);
 
   final mainFile = File(p.join(projectDir.path, framework.mainFile));
   await mainFile.create(recursive: true);

@@ -197,9 +197,31 @@ await writeInertiaResponse(httpRequest.response, response);
 ## Vite Hot File Helper
 
 The package ships a small Vite plugin to generate a `public/hot` file (Laravel
-style). Copy [`assets/vite/inertia_hot_file.js`](assets/vite/inertia_hot_file.js)
-into your project and import it from your Vite config. A full template is
-available at [`assets/vite/vite.config.js`](assets/vite/vite.config.js).
+style).
+
+If you want to generate the plugin file from Dart instead of copying it by
+hand, use:
+
+```dart
+import 'dart:io';
+
+import 'package:inertia_dart/inertia_dart.dart';
+
+Future<void> main() async {
+  await writeInertiaViteHotFilePlugin(Directory('client'));
+}
+```
+
+That writes `client/inertia_hot_file.js` by default. You can also render the
+source without writing a file:
+
+```dart
+final source = renderInertiaViteHotFilePlugin(
+  defaultHotFile: 'frontend/public/hot',
+);
+```
+
+Then import it from your Vite config:
 
 ```js
 import { defineConfig } from 'vite'
@@ -209,6 +231,8 @@ export default defineConfig({
   plugins: [inertiaHotFile()],
 })
 ```
+
+A full template is available at [`assets/vite/vite.config.js`](assets/vite/vite.config.js).
 
 ## Testing
 

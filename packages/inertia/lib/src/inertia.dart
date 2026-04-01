@@ -53,6 +53,7 @@ export 'assets/asset_manifest_entry.dart';
 export 'assets/asset_resolution.dart';
 export 'assets/vite_asset_tags.dart';
 export 'assets/vite_assets.dart';
+export 'assets/vite_hot_file_plugin.dart';
 
 // dart:io helpers
 export 'http/inertia_http.dart';
