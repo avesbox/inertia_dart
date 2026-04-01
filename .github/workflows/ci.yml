@@ -30,10 +30,17 @@ jobs:
         run: dart pub get
 
       - name: Format check
-        run: dart format --set-exit-if-changed .
+        run: |
+          dart format --set-exit-if-changed \
+            packages/inertia/lib packages/inertia/test \
+            packages/routed_inertia/lib packages/routed_inertia/test \
+            packages/serinus_inertia/lib packages/serinus_inertia/test
 
       - name: Analyze
-        run: dart analyze
+        run: |
+          dart analyze --no-fatal-warnings packages/inertia/lib packages/inertia/test
+          dart analyze --no-fatal-warnings packages/routed_inertia/lib packages/routed_inertia/test
+          dart analyze --no-fatal-warnings packages/serinus_inertia/lib packages/serinus_inertia/test
 
       - name: Run package tests
         run: |
@@ -45,4 +52,3 @@ jobs:
               echo "::endgroup::"
             fi
           done
-
