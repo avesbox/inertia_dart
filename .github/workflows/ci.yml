@@ -12,7 +12,41 @@ on:
 
 jobs:
   test:
-    name: Dart tests
+    name: ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [stable]
+        package:
+          - inertia
+          - routed_inertia
+          - serinus_inertia
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Format check
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          dart format --set-exit-if-changed lib test
+
+      - name: Analyze
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          dart analyze --no-fatal-warnings lib test
+
+      - name: Run package tests
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          dart test
     runs-on: ubuntu-latest
     strategy:
       matrix:
