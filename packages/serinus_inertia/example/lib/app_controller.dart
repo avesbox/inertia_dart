@@ -80,7 +80,8 @@ const List<List<Map<String, dynamic>>> _highlightBatches = [
     {
       'id': 'merge-1',
       'title': 'Protocol health dashboard',
-      'note': 'Loaded in the initial visit so we can verify merge semantics later.',
+      'note':
+          'Loaded in the initial visit so we can verify merge semantics later.',
       'owner': 'Ada',
     },
     {
@@ -126,7 +127,8 @@ const List<List<Map<String, dynamic>>> _activityPages = [
       'id': 'activity-1',
       'lane': 'Build',
       'actor': 'Grace Hopper',
-      'action': 'Published a new version hash and kicked off a deploy rehearsal.',
+      'action':
+          'Published a new version hash and kicked off a deploy rehearsal.',
       'minute': '09:02',
       'severity': 'stable',
     },
@@ -134,7 +136,8 @@ const List<List<Map<String, dynamic>>> _activityPages = [
       'id': 'activity-2',
       'lane': 'Client',
       'actor': 'Radia Perlman',
-      'action': 'Confirmed the home page hydrated without replacing SSR markup.',
+      'action':
+          'Confirmed the home page hydrated without replacing SSR markup.',
       'minute': '09:07',
       'severity': 'stable',
     },
@@ -178,7 +181,8 @@ const List<List<Map<String, dynamic>>> _activityPages = [
       'id': 'activity-7',
       'lane': 'History',
       'actor': 'Grace Hopper',
-      'action': 'Validated encrypt-history mode during a manual navigation pass.',
+      'action':
+          'Validated encrypt-history mode during a manual navigation pass.',
       'minute': '09:28',
       'severity': 'stable',
     },
@@ -212,7 +216,8 @@ const List<List<Map<String, dynamic>>> _activityPages = [
       'id': 'activity-11',
       'lane': 'Performance',
       'actor': 'Margaret Hamilton',
-      'action': 'Measured deferred section timing after the first contentful paint.',
+      'action':
+          'Measured deferred section timing after the first contentful paint.',
       'minute': '09:48',
       'severity': 'stable',
     },
@@ -251,12 +256,14 @@ class AppController extends Controller {
           {
             'label': 'Protocol drills',
             'value': '8',
-            'detail': 'Versioning, merge, lazy, deferred, scroll, flash, polling, and history flags.',
+            'detail':
+                'Versioning, merge, lazy, deferred, scroll, flash, polling, and history flags.',
           },
           {
             'label': 'Client patterns',
             'value': '6',
-            'detail': 'Links, remembered state, reloads, infinite scroll, visible loads, and SSR hydration.',
+            'detail':
+                'Links, remembered state, reloads, infinite scroll, visible loads, and SSR hydration.',
           },
         ],
         'routeCards': const [
@@ -341,12 +348,14 @@ class AppController extends Controller {
           {
             'label': 'Total teams',
             'value': (_teamLabels.length - 1).toString(),
-            'detail': 'A quick way to validate query-param routing across links.',
+            'detail':
+                'A quick way to validate query-param routing across links.',
           },
           {
             'label': 'Lazy drill',
             'value': 'Ready',
-            'detail': 'Diagnostics stay out of the initial payload until requested.',
+            'detail':
+                'Diagnostics stay out of the initial payload until requested.',
           },
         ],
         'serverRequest': {
@@ -437,19 +446,21 @@ List<Map<String, dynamic>> _filterUsers(String activeTeam) {
 }
 
 List<Map<String, dynamic>> _buildTeamFilters(String activeTeam) {
-  return _teamLabels.entries.map((entry) {
-    final key = entry.key;
-    final count = key == 'all'
-        ? _teamMembers.length
-        : _teamMembers.where((user) => user['team'] == key).length;
-    return {
-      'id': key,
-      'label': entry.value,
-      'count': count,
-      'href': key == 'all' ? '/users' : '/users?team=$key',
-      'active': key == activeTeam,
-    };
-  }).toList(growable: false);
+  return _teamLabels.entries
+      .map((entry) {
+        final key = entry.key;
+        final count = key == 'all'
+            ? _teamMembers.length
+            : _teamMembers.where((user) => user['team'] == key).length;
+        return {
+          'id': key,
+          'label': entry.value,
+          'count': count,
+          'href': key == 'all' ? '/users' : '/users?team=$key',
+          'active': key == activeTeam,
+        };
+      })
+      .toList(growable: false);
 }
 
 Map<String, dynamic> _buildUserDiagnostics(String activeTeam) {
@@ -520,7 +531,8 @@ List<Map<String, dynamic>> _buildReleaseTimeline() {
 
 Map<String, dynamic> _buildDeepDive() {
   return const {
-    'headline': 'Optional props work best when the UI can stay useful without them.',
+    'headline':
+        'Optional props work best when the UI can stay useful without them.',
     'sections': [
       {
         'title': 'Payload discipline',
@@ -545,11 +557,13 @@ Map<String, dynamic> _buildDeepDive() {
       },
       {
         'name': 'Scroll into view',
-        'expectation': 'The client requests only deepDive and merges it in place.',
+        'expectation':
+            'The client requests only deepDive and merges it in place.',
       },
       {
         'name': 'Navigate away and back',
-        'expectation': 'The route remains useful before the optional section returns.',
+        'expectation':
+            'The route remains useful before the optional section returns.',
       },
     ],
   };

@@ -92,9 +92,11 @@ bool _isPreRenderedBootstrap(String? body, {required String id}) {
   final document = parseFragment(body);
   final hasInertiaBootstrapScript = document
       .querySelectorAll('script')
-      .any((script) =>
-          script.attributes['type'] == 'application/json' &&
-          script.attributes['data-page'] == id);
+      .any(
+        (script) =>
+            script.attributes['type'] == 'application/json' &&
+            script.attributes['data-page'] == id,
+      );
   final hasAppContainer = document.querySelector('div[id="$id"]') != null;
 
   return hasInertiaBootstrapScript && hasAppContainer;

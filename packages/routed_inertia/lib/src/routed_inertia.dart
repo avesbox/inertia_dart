@@ -29,8 +29,8 @@ class RoutedInertia {
     String Function(PageData page, SsrResponse? ssr)? templateRenderer,
     this.ssrGateway,
     this.ssrEnabled = false,
-  })  : responseFactory = responseFactory ?? InertiaResponseFactory(),
-        templateRenderer = templateRenderer ?? _defaultTemplateRenderer;
+  }) : responseFactory = responseFactory ?? InertiaResponseFactory(),
+       templateRenderer = templateRenderer ?? _defaultTemplateRenderer;
 
   final InertiaResponseFactory responseFactory;
   final String Function(PageData page, SsrResponse? ssr) templateRenderer;
@@ -65,8 +65,9 @@ class RoutedInertia {
     final context = request.createContext();
 
     final flash = consumeFlash(ctx);
-    final resolvedVersion =
-        version.isEmpty ? (config?.resolveVersion() ?? '') : version;
+    final resolvedVersion = version.isEmpty
+        ? (config?.resolveVersion() ?? '')
+        : version;
     final resolvedEncryptHistory =
         encryptHistory || (config?.history.encrypt ?? false);
     final resolvedGateway = ssrGateway ?? config?.ssrGateway;

@@ -10,7 +10,10 @@ void main() {
     test('renders the default hot-file plugin template', () {
       final plugin = renderInertiaViteHotFilePlugin();
 
-      expect(plugin, contains("const hotFile = options.hotFile ?? 'public/hot'"));
+      expect(
+        plugin,
+        contains("const hotFile = options.hotFile ?? 'public/hot'"),
+      );
       expect(plugin, contains("name: 'inertia-hot-file'"));
     });
 

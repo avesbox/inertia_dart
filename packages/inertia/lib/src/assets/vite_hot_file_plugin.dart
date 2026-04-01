@@ -14,8 +14,7 @@ const String defaultInertiaViteHotFilePluginFileName = 'inertia_hot_file.js';
 ///
 /// The generated plugin writes the active Vite dev-server origin into a single
 /// hot file so server-side integrations can discover the running frontend.
-const String inertiaViteHotFilePluginTemplate =
-    """import fs from 'node:fs'
+const String inertiaViteHotFilePluginTemplate = """import fs from 'node:fs'
 import path from 'node:path'
 
 export function inertiaHotFile(options = {}) {

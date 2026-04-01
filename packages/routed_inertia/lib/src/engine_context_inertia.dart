@@ -49,14 +49,16 @@ extension EngineContextInertia on EngineContext {
 
     final context = request.createContext();
 
-    final encryptHistoryValue = encryptHistory ??
+    final encryptHistoryValue =
+        encryptHistory ??
         getContextData<bool>(InertiaKeys.encryptHistory) ??
         config?.history.encrypt ??
         false;
     final clearHistoryValue = clearHistory ?? consumeClearHistoryFlag(this);
     final flash = consumeFlash(this);
-    final resolvedVersion =
-        version.isEmpty ? (config?.resolveVersion() ?? '') : version;
+    final resolvedVersion = version.isEmpty
+        ? (config?.resolveVersion() ?? '')
+        : version;
 
     final page = await InertiaResponseFactory().buildPageDataAsync(
       component: component,
@@ -129,7 +131,8 @@ extension EngineContextInertia on EngineContext {
       );
     }
 
-    final htmlContent = htmlBuilder?.call(page, ssrResponse) ??
+    final htmlContent =
+        htmlBuilder?.call(page, ssrResponse) ??
         inertiaDefaultHtml(page, ssrResponse);
     return html(htmlContent);
   }

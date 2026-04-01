@@ -5,7 +5,8 @@ import 'package:inertia_dart/inertia_dart.dart';
 Future<void> main(List<String> args) async {
   final runtime = Platform.environment['INERTIA_SSR_RUNTIME'] ?? 'node';
   final bundle =
-      Platform.environment['INERTIA_SSR_BUNDLE'] ?? 'example/client/dist/ssr.js';
+      Platform.environment['INERTIA_SSR_BUNDLE'] ??
+      'example/client/dist/ssr.js';
   final host = Platform.environment['INERTIA_SSR_HOST'] ?? '127.0.0.1';
   final port =
       int.tryParse(Platform.environment['INERTIA_SSR_PORT'] ?? '13714') ??
