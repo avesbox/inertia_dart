@@ -3,6 +3,8 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:html/parser.dart';
+
 import '../core/inertia_headers.dart';
 import '../core/inertia_request.dart';
 import '../core/inertia_response.dart';
@@ -71,11 +73,31 @@ String renderInertiaBootstrap(
   String id = 'app',
   String? body,
 }) {
+  if (_isPreRenderedBootstrap(body, id: id)) {
+    return body!;
+  }
+
   final safeId = escapeInertiaHtml(id);
   final app = body == null || body.isEmpty
       ? '<div id="$safeId"></div>'
       : '<div id="$safeId">$body</div>';
   return '${inertiaPageScriptTag(page, id: id)}$app';
+}
+
+bool _isPreRenderedBootstrap(String? body, {required String id}) {
+  if (body == null || body.isEmpty) {
+    return false;
+  }
+
+  final document = parseFragment(body);
+  final hasInertiaBootstrapScript = document
+      .querySelectorAll('script')
+      .any((script) =>
+          script.attributes['type'] == 'application/json' &&
+          script.attributes['data-page'] == id);
+  final hasAppContainer = document.querySelector('div[id="$id"]') != null;
+
+  return hasInertiaBootstrapScript && hasAppContainer;
 }
 
 /// Provides dart:io helpers for Inertia requests and responses.

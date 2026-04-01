@@ -67,6 +67,31 @@ void main() {
       expect(body, equals('<div>Html</div>'));
     });
 
+    test('renderInertiaBootstrap avoids wrapping pre-rendered bootstrap', () {
+      final page = PageData(component: 'Home', props: const {}, url: '/');
+      const body =
+          '<script data-page="app" type="application/json">{}</script>'
+          '<div data-server-rendered="true" id="app"><div>SSR</div></div>';
+
+      final html = renderInertiaBootstrap(page, body: body);
+
+      expect(html, equals(body));
+    });
+
+    test(
+      'renderInertiaBootstrap avoids wrapping pre-rendered bootstrap with reordered script attributes',
+      () {
+        final page = PageData(component: 'Home', props: const {}, url: '/');
+        const body =
+            '<script\n  type="application/json"\n  data-page="app">{}</script>'
+            '<div data-server-rendered="true" id=\'app\'>\n  <div>SSR</div>\n</div>';
+
+        final html = renderInertiaBootstrap(page, body: body);
+
+        expect(html, equals(body));
+      },
+    );
+
     test(
       'writeInertiaResponse closes immediately for location responses',
       () async {
