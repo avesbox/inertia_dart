@@ -42,9 +42,9 @@ const List<String> _defaultManagedSsrBundleCandidates = [
 ];
 
 /// Module-level Vite asset configuration.
-class SerinusInertiaAssetOptions {
+class InertiaAssetsOptions {
   /// Creates a new Vite asset configuration.
-  const SerinusInertiaAssetOptions({
+  const InertiaAssetsOptions({
     this.entry = 'index.html',
     this.clientDirectory = 'client',
     this.manifestPath,
@@ -93,7 +93,7 @@ class SerinusInertiaAssetOptions {
   }
 
   /// Returns a copy with updated fields.
-  SerinusInertiaAssetOptions copyWith({
+  InertiaAssetsOptions copyWith({
     String? entry,
     String? clientDirectory,
     String? manifestPath,
@@ -103,7 +103,7 @@ class SerinusInertiaAssetOptions {
     bool? includeReactRefresh,
     String? fallbackScript,
   }) {
-    return SerinusInertiaAssetOptions(
+    return InertiaAssetsOptions(
       entry: entry ?? this.entry,
       clientDirectory: clientDirectory ?? this.clientDirectory,
       manifestPath: manifestPath ?? this.manifestPath,
@@ -117,9 +117,9 @@ class SerinusInertiaAssetOptions {
 }
 
 /// Module-level SSR configuration.
-class SerinusInertiaSsrOptions {
+class InertiaSsrOptions {
   /// Creates a new SSR configuration.
-  const SerinusInertiaSsrOptions({
+  const InertiaSsrOptions({
     this.enabled = false,
     this.gateway,
     this.endpoint,
@@ -251,7 +251,7 @@ class SerinusInertiaSsrOptions {
   }
 
   /// Returns a copy with updated fields.
-  SerinusInertiaSsrOptions copyWith({
+  InertiaSsrOptions copyWith({
     bool? enabled,
     SsrGateway? gateway,
     Uri? endpoint,
@@ -268,7 +268,7 @@ class SerinusInertiaSsrOptions {
     Duration? startupTimeout,
     Duration? healthCheckInterval,
   }) {
-    return SerinusInertiaSsrOptions(
+    return InertiaSsrOptions(
       enabled: enabled ?? this.enabled,
       gateway: gateway ?? this.gateway,
       endpoint: endpoint ?? this.endpoint,
@@ -289,9 +289,9 @@ class SerinusInertiaSsrOptions {
 }
 
 /// Module-level configuration for the Serinus Inertia integration.
-class SerinusInertiaOptions {
+class InertiaOptions {
   /// Creates a new options object.
-  const SerinusInertiaOptions({
+  const InertiaOptions({
     this.version = '',
     this.encryptHistory = false,
     this.clearHistory = false,
@@ -299,7 +299,7 @@ class SerinusInertiaOptions {
     this.sharedProps,
     this.htmlBuilder,
     this.assets,
-    this.ssr = const SerinusInertiaSsrOptions(),
+    this.ssr = const InertiaSsrOptions(),
   });
 
   /// The asset version sent with every page.
@@ -321,23 +321,23 @@ class SerinusInertiaOptions {
   final InertiaHtmlBuilder? htmlBuilder;
 
   /// Optional Vite asset settings used by the default HTML wrapper.
-  final SerinusInertiaAssetOptions? assets;
+  final InertiaAssetsOptions? assets;
 
   /// SSR configuration for first visits.
-  final SerinusInertiaSsrOptions ssr;
+  final InertiaSsrOptions ssr;
 
   /// Returns a copy with updated fields.
-  SerinusInertiaOptions copyWith({
+  InertiaOptions copyWith({
     String? version,
     bool? encryptHistory,
     bool? clearHistory,
     String? elementId,
     InertiaSharedPropsBuilder? sharedProps,
     InertiaHtmlBuilder? htmlBuilder,
-    SerinusInertiaAssetOptions? assets,
-    SerinusInertiaSsrOptions? ssr,
+    InertiaAssetsOptions? assets,
+    InertiaSsrOptions? ssr,
   }) {
-    return SerinusInertiaOptions(
+    return InertiaOptions(
       version: version ?? this.version,
       encryptHistory: encryptHistory ?? this.encryptHistory,
       clearHistory: clearHistory ?? this.clearHistory,
@@ -353,10 +353,10 @@ class SerinusInertiaOptions {
 /// Provider used by [InertiaModule] to expose Inertia defaults.
 class InertiaService extends Provider {
   /// Creates a new service with module-level [options].
-  const InertiaService({this.options = const SerinusInertiaOptions()});
+  const InertiaService({this.options = const InertiaOptions()});
 
   /// The configured module options.
-  final SerinusInertiaOptions options;
+  final InertiaOptions options;
 }
 
 /// Manages an optional external SSR runtime for Serinus.
@@ -377,7 +377,7 @@ class InertiaSsrProcessManager extends Provider
        _stderrSink = stderrSink ?? stderr;
 
   /// The configured module options.
-  final SerinusInertiaOptions options;
+  final InertiaOptions options;
 
   final StartSsrServerCallback _startSsrServer;
   final CheckSsrServerCallback _checkSsrServer;
@@ -563,27 +563,23 @@ class InertiaSsrProcessManager extends Provider
 /// Serinus module that registers configurable Inertia defaults.
 class InertiaModule extends Module {
   /// Creates a new Inertia module with the provided [options].
-  InertiaModule({SerinusInertiaOptions options = const SerinusInertiaOptions()})
+  InertiaModule({InertiaOptions options = const InertiaOptions()})
     : super(
         providers: [
           InertiaService(options: options),
           InertiaSsrProcessManager(options: options),
-          Provider.forValue<SerinusInertiaOptions>(options),
+          Provider.forValue<InertiaOptions>(options),
         ],
         exports: [InertiaService],
+        isGlobal: true,
       );
-}
-
-/// Extracts a flat `Map<String, String>` from Serinus [SerinusHeaders].
-Map<String, String> extractSerinusHeaders(SerinusHeaders headers) {
-  return Map<String, String>.from(headers.asFullMap());
 }
 
 /// Builds an [InertiaRequest] from a Serinus [Request].
 InertiaRequest inertiaRequestFromSerinus(Request request) {
   return InertiaRequest(
-    headers: extractSerinusHeaders(request.headers),
-    url: request.uri.toString(),
+    headers: request.headers.asFullMap(),
+    url: request.path,
     method: request.method.name.toUpperCase(),
     body: request.body,
   );
@@ -616,14 +612,17 @@ extension SerinusInertiaRequestContextExtension<TBody>
     on RequestContext<TBody> {
   /// Returns the configured Inertia service, or fallback defaults.
   InertiaService get inertiaService {
-    if (canUse<InertiaService>()) {
-      return use<InertiaService>();
+    if (!canUse<InertiaService>()) {
+      throw StateError(
+        'InertiaService is not available in the current context. '
+        'Make sure InertiaModule is imported and registered in the application.',
+      );
     }
-    return const InertiaService();
+    return use<InertiaService>();
   }
 
   /// Returns the configured module options, or fallback defaults.
-  SerinusInertiaOptions get inertiaOptions => inertiaService.options;
+  InertiaOptions get inertiaOptions => inertiaService.options;
 
   /// Returns the current request as an [InertiaRequest].
   InertiaRequest get inertiaRequest => request.inertiaRequest;

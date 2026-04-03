@@ -20,9 +20,9 @@ void main() {
         }),
       );
 
-      expect(extractSerinusHeaders(headers), containsPair('x-inertia', 'true'));
+      expect(headers.asFullMap(), containsPair('x-inertia', 'true'));
       expect(
-        extractSerinusHeaders(headers),
+        headers.asFullMap(),
         containsPair('x-inertia-version', 'v1'),
       );
     });
@@ -137,7 +137,7 @@ void main() {
         uri: Uri.parse('http://localhost/dashboard'),
         providers: {
           InertiaService: InertiaService(
-            options: SerinusInertiaOptions(
+            options: InertiaOptions(
               version: 'v1',
               elementId: 'root',
               sharedProps: (_) async => {
@@ -172,8 +172,8 @@ void main() {
         uri: Uri.parse('http://localhost/dashboard'),
         providers: {
           InertiaService: InertiaService(
-            options: const SerinusInertiaOptions(
-              assets: SerinusInertiaAssetOptions(
+            options: const InertiaOptions(
+              assets: InertiaAssetsOptions(
                 entry: 'src/main.jsx',
                 clientDirectory: 'web',
                 devServerUrl: 'http://localhost:5173',
@@ -201,8 +201,8 @@ void main() {
         uri: Uri.parse('http://localhost/dashboard'),
         providers: {
           InertiaService: InertiaService(
-            options: SerinusInertiaOptions(
-              ssr: SerinusInertiaSsrOptions(
+            options: InertiaOptions(
+              ssr: InertiaSsrOptions(
                 enabled: true,
                 gateway: _FakeSsrGateway(
                   const SsrResponse(
@@ -237,8 +237,8 @@ void main() {
         var startCalls = 0;
 
         final manager = InertiaSsrProcessManager(
-          options: const SerinusInertiaOptions(
-            ssr: SerinusInertiaSsrOptions(enabled: true, manageProcess: true),
+          options: const InertiaOptions(
+            ssr: InertiaSsrOptions(enabled: true, manageProcess: true),
           ),
           checkSsrServer: ({required endpoint, healthEndpoint}) async => true,
           startSsrServer: (config, {inheritStdio = false}) async {
@@ -260,8 +260,8 @@ void main() {
         late SsrServerConfig startedConfig;
 
         final manager = InertiaSsrProcessManager(
-          options: const SerinusInertiaOptions(
-            ssr: SerinusInertiaSsrOptions(
+          options: const InertiaOptions(
+            ssr: InertiaSsrOptions(
               enabled: true,
               manageProcess: true,
               runtime: 'bun',
@@ -292,8 +292,8 @@ void main() {
       var stopCalls = 0;
 
       final manager = InertiaSsrProcessManager(
-        options: const SerinusInertiaOptions(
-          ssr: SerinusInertiaSsrOptions(
+        options: const InertiaOptions(
+          ssr: InertiaSsrOptions(
             enabled: true,
             manageProcess: true,
             waitUntilReady: false,
@@ -319,8 +319,8 @@ void main() {
       final process = _FakeProcess();
 
       final manager = InertiaSsrProcessManager(
-        options: const SerinusInertiaOptions(
-          ssr: SerinusInertiaSsrOptions(
+        options: const InertiaOptions(
+          ssr: InertiaSsrOptions(
             enabled: true,
             manageProcess: true,
             waitUntilReady: false,
