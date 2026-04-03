@@ -579,7 +579,7 @@ class InertiaModule extends Module {
 InertiaRequest inertiaRequestFromSerinus(Request request) {
   return InertiaRequest(
     headers: request.headers.asFullMap(),
-    url: request.path,
+    url: request.uri.toString(),
     method: request.method.name.toUpperCase(),
     body: request.body,
   );

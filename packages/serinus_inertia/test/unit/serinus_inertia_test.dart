@@ -68,6 +68,7 @@ void main() {
           'X-Inertia-Partial-Data': 'user.name',
         },
         uri: Uri.parse('http://localhost/dashboard'),
+        providers: {InertiaService: InertiaService()},
       );
 
       final payload = await context.inertia(
@@ -93,7 +94,10 @@ void main() {
     });
 
     test('returns bootstrap html for initial visits', () async {
-      final context = _context(uri: Uri.parse('http://localhost/dashboard'));
+      final context = _context(
+        uri: Uri.parse('http://localhost/dashboard'),
+        providers: {InertiaService: InertiaService()},
+      );
 
       final payload = await context.inertia(
         component: 'Dashboard',
