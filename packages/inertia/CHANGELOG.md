@@ -1,5 +1,8 @@
-## 0.1.1
+## 1.0.0
 
+- Targets Inertia.js 3.x client adapters. For Inertia.js 2.x and earlier, use
+  `inertia_dart` `<1.0.0`.
+- Updated `artisanal` to `^0.3.0`.
 - Fixed case-sensitive header lookups -- `InertiaHeaderUtils` now performs
   case-insensitive matching via a new `_get()` helper, fixing compatibility
   with `dart:io` `HttpHeaders` which lowercases header names.

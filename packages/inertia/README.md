@@ -7,11 +7,18 @@ support, and testing utilities. Pair it with a client adapter like
 
 > **New here?** Follow the [Build a Contacts App](https://kingwill101.github.io/docs/inertia_dart/tutorial) tutorial for a hands-on walkthrough using just `dart:io`.
 
+> **Using Serinus?** Use the [`serinus_inertia`](https://pub.dev/packages/serinus_inertia) package for a more integrated experience — it provides `InertiaModule`, `RequestContext.inertia()`, and managed SSR support out of the box.
+
 ## Install
 
 ```bash
 dart pub add inertia_dart
 ```
+
+| Inertia.js client version | `inertia_dart` package version |
+| --- | --- |
+| 3.x | `>=1.0.0` |
+| `<3.0` | `<1.0.0` |
 
 ## CLI
 
@@ -248,3 +255,4 @@ response.assertInertia((page) {
 
 - [Inertia Dart docs](https://kingwill101.github.io/docs/inertia_dart/) -- full API reference and tutorial
 - [Inertia core docs](https://inertiajs.com) -- protocol specification and client adapters
+- [`serinus_inertia`](https://pub.dev/packages/serinus_inertia) -- Serinus adapter with `InertiaModule`, `RequestContext.inertia()`, and managed SSR
