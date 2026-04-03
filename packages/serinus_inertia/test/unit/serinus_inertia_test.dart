@@ -21,10 +21,7 @@ void main() {
       );
 
       expect(headers.asFullMap(), containsPair('x-inertia', 'true'));
-      expect(
-        headers.asFullMap(),
-        containsPair('x-inertia-version', 'v1'),
-      );
+      expect(headers.asFullMap(), containsPair('x-inertia-version', 'v1'));
     });
   });
 
