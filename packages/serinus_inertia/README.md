@@ -50,9 +50,9 @@ class AppModule extends Module {
     : super(
         imports: [
           InertiaModule(
-            options: SerinusInertiaOptions(
+            options: InertiaOptions(
               version: '1.0.0',
-              assets: SerinusInertiaAssetOptions(
+              assets: InertiaAssetOptions(
                 entry: 'src/main.jsx',
                 clientDirectory: 'client',
                 includeReactRefresh: true,
@@ -164,7 +164,7 @@ Open `http://127.0.0.1:4000`.
 `InertiaModule` is the high-level integration point. Use it when you want
 shared defaults instead of repeating options in every handler.
 
-`SerinusInertiaOptions` can define:
+`InertiaOptions` can define:
 
 - `version`
 - `elementId`
@@ -183,7 +183,7 @@ If `htmlBuilder` is omitted, the default wrapper renders:
 
 ## Client Assets
 
-Use `SerinusInertiaAssetOptions` when you want the package to know where the
+Use `InertiaAssetOptions` when you want the package to know where the
 frontend lives.
 
 For development asset resolution, the package uses this order:
@@ -201,8 +201,8 @@ manually, use `writeInertiaViteHotFilePlugin(Directory('client'))` from
 
 ```dart
 InertiaModule(
-  options: SerinusInertiaOptions(
-    assets: SerinusInertiaAssetOptions(
+  options: InertiaOptions(
+    assets: InertiaAssetOptions(
       entry: 'src/main.jsx',
       clientDirectory: 'client',
       // Optional overrides:
@@ -221,7 +221,7 @@ hand-writing script and stylesheet tags.
 If your dev server runs somewhere unusual, either point directly at it:
 
 ```dart
-assets: SerinusInertiaAssetOptions(
+assets: InertiaAssetOptions(
   entry: 'src/main.jsx',
   clientDirectory: 'client',
   devServerUrl: 'http://127.0.0.1:5174',
@@ -231,7 +231,7 @@ assets: SerinusInertiaAssetOptions(
 or override the hot file path if your tooling writes it somewhere else:
 
 ```dart
-assets: SerinusInertiaAssetOptions(
+assets: InertiaAssetOptions(
   entry: 'src/main.jsx',
   clientDirectory: 'client',
   hotFile: 'frontend/public/hot',
@@ -240,7 +240,7 @@ assets: SerinusInertiaAssetOptions(
 
 ## SSR
 
-Use `SerinusInertiaSsrOptions` for first-visit SSR.
+Use `InertiaSsrOptions` for first-visit SSR.
 
 ### Managed by Serinus
 
@@ -249,8 +249,8 @@ separate child process during startup and stop it again on shutdown.
 
 ```dart
 InertiaModule(
-  options: SerinusInertiaOptions(
-    ssr: SerinusInertiaSsrOptions(
+  options: InertiaOptions(
+    ssr: InertiaSsrOptions(
       enabled: true,
       manageProcess: true,
       runtime: 'node', // or 'bun'
@@ -271,8 +271,8 @@ existing endpoint instead:
 
 ```dart
 InertiaModule(
-  options: SerinusInertiaOptions(
-    ssr: SerinusInertiaSsrOptions(
+  options: InertiaOptions(
+    ssr: InertiaSsrOptions(
       enabled: true,
       endpoint: Uri.parse('http://127.0.0.1:13714/render'),
       // Optional:
@@ -306,8 +306,8 @@ directly:
 
 ```dart
 InertiaModule(
-  options: SerinusInertiaOptions(
-    ssr: SerinusInertiaSsrOptions(
+  options: InertiaOptions(
+    ssr: InertiaSsrOptions(
       enabled: true,
       gateway: MyCustomSsrGateway(),
     ),
