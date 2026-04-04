@@ -8,6 +8,8 @@ topics:
   - server
   - spa
 
+license: MIT
+
 resolution: workspace
 
 environment:
@@ -26,3 +28,4 @@ executables:
 dev_dependencies:
   lints: ^6.0.0
   test: ^1.29.0
+  mime: ^2.0.0
