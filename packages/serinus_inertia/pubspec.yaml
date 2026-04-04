@@ -14,8 +14,8 @@ environment:
   sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
-  artisanal: ^0.1.2
-  inertia_dart: ^0.1.1
+  artisanal: ^0.3.0
+  inertia_dart: ^1.0.0
   path: ^1.9.1
   serinus: ^2.1.7
 

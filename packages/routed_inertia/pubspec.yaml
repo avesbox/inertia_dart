@@ -1,6 +1,6 @@
 name: routed_inertia
 description: Inertia.js integration for Routed that adds middleware, EngineContext helpers, SSR gateway wiring, and asset manifest support for hybrid apps.
-version: 0.1.1
+version: 0.2.0
 repository: https://github.com/kingwill101/inertia_dart
 tags:
   - routed
@@ -11,8 +11,8 @@ environment:
   sdk: ">=3.9.0 <4.0.0"
 
 dependencies:
-  inertia_dart: ^0.1.1
-  routed: ^0.3.2
+  inertia_dart: ^1.0.0
+  routed: ^0.3.3
   json_schema_builder: ^0.1.3
   meta: ^1.18.0
 
@@ -21,5 +21,5 @@ dev_dependencies:
   test: ^1.29.0
   lints: ^6.0.0
   routed_testing: ^0.3.2
-  server_testing: ^0.3.2
+  server_testing: ^0.3.3
   file: ^7.0.1
