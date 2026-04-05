@@ -55,9 +55,9 @@ class AppModule extends Module {
     : super(
         imports: [
           InertiaModule(
-            options: SerinusInertiaOptions(
+            options: InertiaOptions(
               version: '1.0.0',
-              assets: SerinusInertiaAssetOptions(
+              assets: InertiaAssetsOptions(
                 entry: 'src/main.jsx',
                 clientDirectory: 'client',
                 includeReactRefresh: true,
