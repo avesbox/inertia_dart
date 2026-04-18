@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite build --ssr src/ssr.jsx",
-    "build:ssr": "vite build --ssr src/ssr.jsx",
+    "build:client": "node -e \"const fs=require('node:fs'); try { fs.unlinkSync('public/hot') } catch {}\" && vite build",
+    "build": "npm run build:client && npm run build:ssr",
+    "build:ssr": "vite build --ssr src/ssr.jsx --emptyOutDir false --manifest ssr-manifest.json",
     "lint": "eslint .",
     "preview": "vite preview"
   },
