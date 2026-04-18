@@ -1,0 +1,9 @@
+.git
+.codex
+.dart_tool
+**/.dart_tool
+**/node_modules
+**/dist
+**/build
+**/public/hot
+**/.DS_Store

@@ -51,7 +51,7 @@ In development the server resolves client assets in this order:
 If you run Vite on a custom port and do not want to rely on the hot file, set:
 
 ```dart
-assets: SerinusInertiaAssetOptions(
+assets: InertiaAssetsOptions(
   entry: 'src/main.jsx',
   clientDirectory: 'client',
   devServerUrl: 'http://127.0.0.1:5174',
@@ -118,7 +118,7 @@ npm run build:ssr
 Then enable this in `lib/app_module.dart`:
 
 ```dart
-ssr: SerinusInertiaSsrOptions(
+ssr: InertiaSsrOptions(
   enabled: true,
   manageProcess: true,
   runtime: 'node', // or 'bun'
@@ -148,17 +148,59 @@ Then enable the endpoint-based `ssr:` section in `lib/app_module.dart`.
 
 ## Production Build
 
-Build the client bundle:
+See [DEPLOY.md](DEPLOY.md) for a full walkthrough covering client and SSR
+bundle compilation, Dart server compilation, direct static asset serving from
+Serinus, optional front-door proxies, alternative nginx/Caddy asset serving,
+and a systemd service unit.
+
+The short version:
 
 ```bash
 cd client
-npm run build
+npm run build   # builds both the browser bundle and client/dist/ssr.js
+cd ..
+mkdir -p build
+dart compile exe bin/main.dart -o build/server
 ```
 
-Then start the Serinus server normally:
+The server reads the Vite manifest from `client/dist/.vite/manifest.json`
+relative to its working directory, and the example serves production assets
+from `client/dist/assets` at `/assets/*`. The deploy guide also shows the
+alternative layout where nginx or Caddy serves those same built assets
+directly.
+
+## Docker Compose
+
+If you want containerized production-style setups, the bundled Compose file
+defines separate client-rendered and SSR stacks without an nginx sidecar.
+
+From this directory:
 
 ```bash
-dart run bin/main.dart
+docker compose --profile client up --build
 ```
 
-The example server will read the Vite manifest from `client/dist/.vite/manifest.json`.
+Then open <http://127.0.0.1:8080>.
+
+The client-rendered stack uses:
+
+- `client-app` — the compiled Dart server with `client/dist/` copied into the
+  image and `/assets/*` served directly by Serinus
+
+For SSR with the same Compose file:
+
+```bash
+docker compose --profile ssr up --build
+```
+
+That starts:
+
+- `ssr-renderer` — a Node container running `client/dist/ssr.js`
+- `ssr-app` — the compiled Dart server configured to call
+  `http://ssr-renderer:13714/render`
+
+Compose waits for `ssr-renderer` to report healthy before starting `ssr-app`.
+
+The SSR stack publishes port `8081` by default so you can run both stacks side
+by side. Override the defaults with `SERINUS_INERTIA_CLIENT_PORT` or
+`SERINUS_INERTIA_SSR_PORT` if needed.
