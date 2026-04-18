@@ -12,5 +12,8 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     manifest: true,
+    rollupOptions: {
+      input: 'src/main.jsx',
+    },
   },
 })

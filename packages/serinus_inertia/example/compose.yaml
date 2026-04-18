@@ -1,0 +1,51 @@
+services:
+  client-app:
+    profiles:
+      - client
+    build:
+      context: ../../..
+      dockerfile: packages/serinus_inertia/example/Dockerfile.client
+      target: app
+    ports:
+      - "${SERINUS_INERTIA_CLIENT_PORT:-8080}:4000"
+    restart: unless-stopped
+
+  ssr-renderer:
+    profiles:
+      - ssr
+    build:
+      context: ../../..
+      dockerfile: packages/serinus_inertia/example/Dockerfile.ssr
+      target: ssr
+    expose:
+      - "13714"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:13714/health').then((response)=>process.exit(response.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 2s
+    restart: unless-stopped
+
+  ssr-app:
+    profiles:
+      - ssr
+    build:
+      context: ../../..
+      dockerfile: packages/serinus_inertia/example/Dockerfile.ssr
+      target: app
+    environment:
+      SERINUS_INERTIA_ENABLE_SSR: "true"
+      SERINUS_INERTIA_SSR_ENDPOINT: "http://ssr-renderer:13714/render"
+    depends_on:
+      ssr-renderer:
+        condition: service_healthy
+    ports:
+      - "${SERINUS_INERTIA_SSR_PORT:-8081}:4000"
+    restart: unless-stopped

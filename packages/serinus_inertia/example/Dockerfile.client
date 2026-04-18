@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1.7
+
+FROM node:24-bookworm-slim AS client-build
+WORKDIR /workspace
+
+COPY . .
+
+WORKDIR /workspace/packages/serinus_inertia/example/client
+RUN npm ci
+RUN npm run build
+
+FROM dart:stable AS server-build
+WORKDIR /workspace
+
+COPY . .
+
+WORKDIR /workspace/packages/serinus_inertia/example
+RUN dart pub get
+RUN mkdir -p build && dart compile exe bin/main.dart -o build/server
+
+FROM debian:bookworm-slim AS app
+WORKDIR /opt/serinus-inertia
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=server-build /workspace/packages/serinus_inertia/example/build/server ./server
+COPY --from=client-build /workspace/packages/serinus_inertia/example/client/dist ./client/dist
+
+EXPOSE 4000
+
+CMD ["./server"]
