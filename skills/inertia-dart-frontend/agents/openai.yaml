@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inertia Dart Frontend"
+  short_description: "Build frontends with Inertia Dart"
+  default_prompt: "Use $inertia-dart-frontend to build or extend an Inertia Dart frontend in the current project."
